@@ -4,10 +4,10 @@ import { FaFilePdf, FaRegSmile, FaDownload, FaCheckCircle, FaPlus, FaRedo } from
 import { useState } from "react";
 import { IoIosAttach, IoMdMore } from "react-icons/io";
 
-export default function TaskDashboard({SideBar}) {
+export default function TaskDashboard({sidebarOpen, setSidebarOpen}) {
 
   const [infoPopupOpen, setInfoPopupOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const attachments = [
     { name: "Landing-page.pdf", date: "2023/10/03", size: "9 MB", status: "completed" },
     { name: "Landing-page.pdf", date: "2023/10/03", size: "9 MB", status: "completed" },
@@ -22,7 +22,6 @@ export default function TaskDashboard({SideBar}) {
           }`} onClick={() => setSidebarOpen(!sidebarOpen)}>
           &times;
         </div>
-        <SideBar sidebarOpen={sidebarOpen} />
 
 
         <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? "lg:ml-64" : "ml-0"

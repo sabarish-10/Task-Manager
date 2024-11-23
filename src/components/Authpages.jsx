@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import bgImage from '../assets/BgImage.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
 
 const FlexboxExample = () => {
     const navigate = useNavigate();
@@ -52,7 +52,7 @@ const FlexboxExample = () => {
         if (userExists) {
             toast.success("Login successful!");
             setTimeout(() => {
-                navigate("/Dashboard");
+                navigate("/SideBar");
              }, 1500);
         } else {
             toast.error("Invalid email or password!");

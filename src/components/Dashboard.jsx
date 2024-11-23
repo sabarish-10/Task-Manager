@@ -1,13 +1,23 @@
-import { useState } from "react"
+import { useState,useRef } from "react"
 import Chart from '../assets/chart.png'
-
+import Calendar from "./Calendar"
 import hamburgerIcon from '../assets/hamburger.png'
-const Dashboard = ({SideBar}) => {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+const Dashboard = ({ sidebarOpen, setSidebarOpen }) => {
     // const [taskId,setTaskId]=useState(3);
     const [tasks, setTasks] = useState(['Create Wireframe', 'Slack Logo Design', 'Dashboard Design', 'Create Wireframe', 'App Icon Design']);
     const [taskId, setTaskId] = useState(null);
+    const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
+    const cardRef = useRef(null);
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [newTask, setNewTask] = useState('');
+    const handleCardClick = () => {
+        if (cardRef.current) {
+            const rect = cardRef.current.getBoundingClientRect();
+            setCalendarPosition({
+                top: rect.bottom + window.scrollY, 
+            });
+            setIsCalendarOpen(!isCalendarOpen);
+        }};
     const addTask = () => {
         if (newTask !== '') {
             setTasks([...tasks, newTask]);
@@ -22,15 +32,14 @@ const Dashboard = ({SideBar}) => {
 
     return (
         <>
-            <div className="dashboard  no-scrollbar">
+            <div className="relative w-full">
 
                 <div className={`absolute z-40 rounded-full bg-white   top-3 text-3xl hover:cursor-pointer font-semibold text-red-500 right-4 px-3 py-1 flex items-center justify-center ${sidebarOpen ? "xl:hidden" : "hidden"
                     }`} onClick={() => setSidebarOpen(!sidebarOpen)}>
                     &times;
                 </div>
-                <SideBar sidebarOpen={sidebarOpen} />
                 <div className="content">
-                    <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? "xl:ml-60" : "ml-0"
+                    <main className={`flex-1 transition-all duration-200 ${sidebarOpen ? "xl:ml-60" : "ml-0"
                         }`}>
                         <header className="flex items-center justify-between p-2 md:p-3 space-y-3 sm:space-y-0">
 
@@ -50,26 +59,26 @@ const Dashboard = ({SideBar}) => {
                                     className="w-48 text-xs md:text-sm xl:text-md md:w-72 lg:w-96 p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-teal-400 focus:outline-none"
                                 />
                             </div>
-                            
-        <div className="relative flex items-center space-x-3 mx-4">
-  <div className="hidden md:block flex flex-col justify-between gap-2 items-center">
-    <span className="text-sm font-bold text-gray-800">Santhosh R</span>
-    <p className="text-xs text-gray-500">UI/UX Designer</p>
-  </div>
-  <div className="relative group">
-    <img
-      src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png"
-      alt="User Profile"
-      className="md:w-8 md:h-8 h-6 cursor-pointer w-6 rounded-full"
-    />
-    {/* Tooltip */}
-    <div className="absolute left-1  -translate-x-1/2 mt-2 hidden group-hover:flex flex-col items-center bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg">
-  <p className="inline-block font-bold">Santhosh R</p>
-  <p className="inline-block">UI/UX Designer</p>
-</div>
 
-  </div>
-</div>
+                            <div className="relative flex items-center space-x-3 mx-4">
+                                <div className="hidden md:block flex flex-col justify-between gap-2 items-center">
+                                    <span className="text-sm font-bold text-gray-800">Santhosh R</span>
+                                    <p className="text-xs text-gray-500">UI/UX Designer</p>
+                                </div>
+                                <div className="relative group">
+                                    <img
+                                        src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png"
+                                        alt="User Profile"
+                                        className="md:w-8 md:h-8 h-6 cursor-pointer w-6 rounded-full"
+                                    />
+                                    {/* Tooltip */}
+                                    <div className="absolute left-1  -translate-x-1/2 mt-2 hidden group-hover:flex flex-col items-center bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg">
+                                        <p className="inline-block font-bold">Santhosh R</p>
+                                        <p className="inline-block">UI/UX Designer</p>
+                                    </div>
+
+                                </div>
+                            </div>
                         </header>
 
 
@@ -318,7 +327,9 @@ const Dashboard = ({SideBar}) => {
                             <div className="rightcontent sm:col-span-4 md:col-span-1">
                                 <div className="worktime m-1">
                                     <div className=" items-center gap-5 justify-between p-4 bg-white rounded-lg shadow-md border border-gray-300">
-                                        <div className="bg-purple-200 w-full flex justify-between rounded-md p-2">
+                                        <div className="bg-purple-200 cursor-pointer w-full flex justify-between rounded-md p-2"
+                                               onClick={handleCardClick}
+                                            ref={cardRef}>
                                             <div className=" w-full font-semibold">
                                                 <p className="text-md text-gray-800">September</p>
                                                 <p className="text-md font-semibold text-gray-800">23-10-2023</p>
@@ -397,8 +408,28 @@ const Dashboard = ({SideBar}) => {
                     </main>
 
                 </div>
+                <div className={`absolute lg:right-5 lg:top-16    z-50 ${isCalendarOpen ? "block" : "hidden"
+                    }`}
+                    style={{
+                        ...(window.innerWidth < 640 && {
+                            top: `${calendarPosition.top}px`,
+                            right:'0px'
+                        }),
+                        ...(window.innerWidth >= 640 && window.innerWidth < 1024 && {
+                            top: `${calendarPosition.top}px`, 
+                            left: '50%',                     
+                            transform: 'translateX(-50%)', 
+                        }),
+                    }}
+                    
+                    
+                    >
+
+                    <Calendar isCalendarOpen={isCalendarOpen} setIsCalendarOpen={setIsCalendarOpen} />
+                </div>
 
             </div>
+
 
         </>
     )
